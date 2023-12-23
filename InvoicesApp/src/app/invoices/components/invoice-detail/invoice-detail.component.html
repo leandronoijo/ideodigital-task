@@ -1,0 +1,63 @@
+<div class="container mt-4" *ngIf="invoice">
+    <h2>{{ isEditMode ? 'Edit' : 'View' }} Invoice</h2>
+    <form (ngSubmit)="saveChanges()" #invoiceForm="ngForm">
+        <div class="mb-3"  *ngIf="!isNewInvoice">
+            <label for="invoiceId" class="form-label">Invoice ID</label>
+            <input type="text" id="invoiceId" name="invoiceId" class="form-control" [(ngModel)]="invoice.id" disabled>
+        </div>
+
+        <div class="mb-3" *ngIf="!isNewInvoice">
+            <label for="addressedTo" class="form-label">Addressed To</label>
+            <input type="text" id="addressedTo" name="addressedTo" class="form-control" [(ngModel)]="invoice.addressedTo" disabled>
+        </div>
+
+        <div class="mb-3" *ngIf="!isNewInvoice">
+            <label for="issued" class="form-label">Issued</label>
+            <input type="datetime-local" id="issued" name="issued" class="form-control" 
+                   [(ngModel)]="invoice.issued" [disabled]="!isEditMode" 
+                   required #issued="ngModel">
+            <div *ngIf="issued.errors" class="alert alert-danger">
+                <div *ngIf="issued.errors['required']">Issued date is required.</div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="customerId" class="form-label">Customer</label>
+            <select id="customerId" name="customerId" class="form-select" 
+                    [(ngModel)]="invoice.customer.id" [disabled]="!isEditMode" 
+                    required #customerId="ngModel">
+                <option value="" disabled>Select Customer</option>
+                <option *ngFor="let customer of customers" [value]="customer.id">{{ customer.name }}</option>
+            </select>
+            <div *ngIf="customerId.errors" class="alert alert-danger">
+                <div>Customer selection is required.</div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="taxPercentage" class="form-label">Tax Percentage</label>
+            <input type="number" id="taxPercentage" name="taxPercentage" class="form-control" 
+                   [(ngModel)]="invoice.taxPercentage" [disabled]="!isEditMode" 
+                   required min="0" #taxPercentage="ngModel">
+            <div *ngIf="taxPercentage.errors" class="alert alert-danger">
+                <div *ngIf="taxPercentage.errors['required']">Tax Percentage is required.</div>
+                <div *ngIf="taxPercentage.errors['min']">Tax Percentage must be a positive number.</div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="amountBeforeTax" class="form-label">Amount Before Tax</label>
+            <input type="number" id="amountBeforeTax" name="amountBeforeTax" class="form-control" 
+                   [(ngModel)]="invoice.amountBeforeTax" [disabled]="!isEditMode" 
+                   required min="1" #amountBeforeTax="ngModel">
+            <div *ngIf="amountBeforeTax.errors" class="alert alert-danger">
+                <div *ngIf="amountBeforeTax.errors['required']">Amount Before Tax is required.</div>
+                <div *ngIf="amountBeforeTax.errors['min']">Amount Before Tax must be a positive number.</div>
+            </div>
+        </div>
+
+        <div *ngIf="isEditMode" class="mt-4">
+            <button type="submit" class="btn btn-primary" [disabled]="invoiceForm.invalid"> {{ isNewInvoice ? 'Create' : 'Save Changes' }}</button>
+        </div>
+    </form>
+</div>

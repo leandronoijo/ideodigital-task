@@ -1,0 +1,29 @@
+<div class="container mt-4">
+    <h2>Invoices</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Issued</th>
+                <th>Addressed To</th>
+                <th>Tax (%)</th>
+                <th>Amount Before Tax</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let invoice of invoices">
+                <td>{{ invoice.id }}</td>
+                <td>{{ invoice.issued | date }}</td>
+                <td>{{ invoice.addressedTo }}</td>
+                <td>{{ invoice.taxPercentage }}</td>
+                <td>{{ invoice.amountBeforeTax }}</td>
+                <td>
+                    <a [routerLink]="['/invoice', invoice.id, 'view']">View</a>
+                    |
+                    <a [routerLink]="['/invoice', invoice.id, 'edit']">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
